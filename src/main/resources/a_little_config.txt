@@ -1,0 +1,4 @@
+jdbcUrl = jdbc:mysql://39.104.84.129:3306/ecart?characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull
+user = deltaxing
+password =!Xx@mariadb
+devMode = true

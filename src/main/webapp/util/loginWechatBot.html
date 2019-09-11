@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<img id="qrcode">
+	<script src="lib/jquery-3.3.1.js"></script>
+	<script>
+		setInterval(() => {
+			$("#qrcode").attr("src","assets/qrcode.png?v="+ Math.random());
+		}, 2000);
+	</script>
+</body>
+</html>

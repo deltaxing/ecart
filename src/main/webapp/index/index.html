@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="lib/bootstrap-4.1.2-dist/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+
+    <title>我的购物车</title>
+  </head>
+  <style>
+	  body{
+	    padding-bottom:70px;
+	  }
+  </style>
+  
+  <body>
+	<div id="app" class="container">
+	  <div class="row">
+	    <div class="col">
+	      	名称
+	    </div>
+	    <div class="col">
+	    	单价
+	    </div>
+	    <div class="col">
+	    	数量
+	    </div>
+	  </div>	
+	  <div class="row"  v-for="item in GoodsInCart">
+	    <div class="col">
+	      {{item.GoodsName}}
+	    </div>
+	    <div class="col">
+	      {{item.GoodsPrice}}
+	    </div>
+	   	<div class="col">
+	      {{item.Quantity}}{{item.GoodsUnit}}
+	    </div>
+	  </div>
+		<nav class="navbar fixed-bottom">
+			<div><span>共计：{{TotalPrice}}</span></div>
+			<button type="button" class="btn btn-primary btn-lg btn-block" onclick="Pay()">立即支付</button>
+		</nav>
+	</div>
+
+
+	<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="lib/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="lib/bootstrap-4.1.2-dist/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+    var app = new Vue({
+		el: '#app',
+		data: {
+    	    GoodsInCart: [],
+    	    TotalPrice : "0"
+		}
+   	});
+    
+    $.post("/ecart/GetGoodsInCart",{CartID:1,guo:JSON.stringify({gg:11,hh:[1,3,4]})},function(result){
+    	app.$data.GoodsInCart = result.GoodsList;
+    	app.$data.TotalPrice = result.TotalPrice;
+    	
+    });
+    
+    function Pay(){
+    	var para = {};
+    	var date = new Date();
+    	para.WIDout_trade_no = "" + date.getFullYear() + (date.getMonth()+1).toString().padStart(2,"0") + date.getDate().toString().padStart(2,"0") + date.getHours().toString().padStart(2,"0") + date.getMinutes().toString().padStart(2,"0") + date.getSeconds().toString().padStart(2,"0") + date.getMilliseconds().toString().padStart(3,"0");
+    	para.WIDsubject = "ecart购物";
+    	para.WIDtotal_amount = "0.01";
+    	para.WIDbody = "ecart" + "0.01";
+    	//para.WIDshow_url = encodeURIComponent(window.location.href);
+    	$.post("/ecart/pay/pay.jsp", para, function(result) {
+			console.log(result);
+			document.write(result);
+		});
+    };
+    </script>
+    
+    <script src="https://smtpjs.com/v2/smtp.js"></script>
+    <script>
+//     Email.send("deltaxing@126.com",
+//     		"deltaxing@126.com",
+//     		"This is a subject hehe",
+//     		"this is the body haha",
+//     		"smtp.126.com",
+//     		"deltaxing",
+//     		"Abc999999");
+    </script>
+
+  </body>
+</html>
